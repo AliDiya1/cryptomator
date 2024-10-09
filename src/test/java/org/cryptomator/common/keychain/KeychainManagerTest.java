@@ -57,4 +57,42 @@ public class KeychainManagerTest {
 
 	}
 
+	@Test
+	public void testDeletePassphrase() throws KeychainAccessException {
+		// Initialiser le KeychainManager avec une instance de MapKeychainAccess
+		MapKeychainAccess mapKeychainAccess = new MapKeychainAccess();
+		KeychainManager keychainManager = new KeychainManager(new SimpleObjectProperty<>(mapKeychainAccess));
+
+		// Stocker une passphrase
+		keychainManager.storePassphrase("testKey", "Test", "testPassphrase");
+		Assertions.assertArrayEquals("testPassphrase".toCharArray(), keychainManager.loadPassphrase("testKey"));
+
+		// Supprimer la passphrase
+		keychainManager.deletePassphrase("testKey");
+
+		// Essayer de charger la passphrase après la suppression
+		Assertions.assertNull(keychainManager.loadPassphrase("testKey"), "passphrase devrait etre null apres delete");
+	}
+
+	@Test
+	public void testChangePassphrase() throws KeychainAccessException {
+		// Initialiser le KeychainManager avec une instance de MapKeychainAccess
+		MapKeychainAccess mapKeychainAccess = new MapKeychainAccess();
+		KeychainManager keychainManager = new KeychainManager(new SimpleObjectProperty<>(mapKeychainAccess));
+
+		// Stocker une passphrase initiale
+		keychainManager.storePassphrase("testKey", "Test", "initialPassphrase");
+		Assertions.assertArrayEquals("initialPassphrase".toCharArray(), keychainManager.loadPassphrase("testKey"));
+
+		// Changer la passphrase
+		keychainManager.changePassphrase("testKey", "Test", "newPassphrase");
+
+		// Vérifier que la nouvelle passphrase a été stockée correctement
+		Assertions.assertArrayEquals("newPassphrase".toCharArray(), keychainManager.loadPassphrase("testKey"),
+				"nouvelle passphrase devrait etre stored apres changement");
+
+		// Vérifier que l'ancienne passphrase n'est plus accessible
+		Assertions.assertNull(keychainManager.loadPassphrase("oldKey"), "ancienne key devrait retourner null puisque ca l'a jamais ete set");
+	}
+
 }
