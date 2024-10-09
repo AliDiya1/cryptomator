@@ -200,4 +200,15 @@ public class ErrorCodeTest {
 
 	}
 
+	@Test
+	@DisplayName("countTopmostFrames() with allFrames shorter than bottomFrames")
+	public void testCountTopmostFramesAllFramesShorter() {
+		var allFrames = new StackTraceElement[]{foo};
+		var bottomFrames = new StackTraceElement[]{foo, bar};
+
+		int result = ErrorCode.countTopmostFrames(allFrames, bottomFrames);
+
+		Assertions.assertEquals(1, result, "When allFrames is shorter than bottomFrames, it should return the length of allFrames.");
+	}
+
 }
