@@ -126,4 +126,22 @@ public class PassphraseTest {
 
 	}
 
+	@Test
+	public void testEquals_SameInstance() {
+		// Tester si 'equals' renvoie true pour la même instance.
+		Passphrase passphrase = new Passphrase(new char[]{'r', 'a', 'n', 'd', 'o', 'm'});
+
+		// Compare l'instance avec elle-même.
+		Assertions.assertTrue(passphrase.equals(passphrase));
+	}
+
+	@Test
+	public void testEquals_NullObject() {
+		// Tester si 'equals' renvoie false pour un objet null.
+		Passphrase passphrase = new Passphrase(new char[]{'r', 'a', 'n', 'd', 'o', 'm'});
+
+		// Compare l'instance avec null.
+		Assertions.assertFalse(passphrase.equals(null));
+	}
+
 }
